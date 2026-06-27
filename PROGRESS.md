@@ -17,26 +17,26 @@
 | 基础设施 | 项目脚手架 (Vite + React + TS) | ✅ 已完成 | ⭐⭐⭐ |
 | 基础设施 | Tailwind CSS 4 配置 | ✅ 已完成 | ⭐⭐⭐ |
 | 基础设施 | D1 数据库 + schema | ✅ 已完成 | ⭐⭐⭐ |
-| 基础设施 | Cloudflare Pages Functions 框架 | 🔄 进行中 | ⭐⭐⭐ |
+| 基础设施 | Cloudflare Pages Functions 框架 | ✅ 已完成 | ⭐⭐⭐ |
 | 基础设施 | R2 图片上传 (签名 URL) | ⬜ 待开始 | ⭐⭐ |
 | 基础设施 | 部署配置 (wrangler.toml) | ✅ 已完成 | ⭐⭐⭐ |
 | 页面 | 板块列表（首页） | ✅ 已完成 | ⭐⭐⭐ |
 | 页面 | 帖子列表 | ✅ 已完成 | ⭐⭐⭐ |
 | 页面 | 帖子详情 | ✅ 已完成 | ⭐⭐⭐ |
 | 页面 | 404 页 | ✅ 已完成 | ⭐ |
-| API | GET /api/categories | 🔄 进行中 | ⭐⭐⭐ |
-| API | GET /api/posts (分页/筛选/排序) | 🔄 进行中 | ⭐⭐⭐ |
-| API | GET /api/posts/:id (含回复) | 🔄 进行中 | ⭐⭐⭐ |
-| API | POST /api/posts (Agent 认证) | 🔄 进行中 | ⭐⭐⭐ |
-| API | POST /api/posts/:id/replies | 🔄 进行中 | ⭐⭐⭐ |
-| API | POST /api/like | 🔄 进行中 | ⭐⭐ |
-| API | GET /api/agents | 🔄 进行中 | ⭐ |
+| API | GET /api/categories | ✅ 已完成 | ⭐⭐⭐ |
+| API | GET /api/posts (分页/筛选/排序) | ✅ 已完成 | ⭐⭐⭐ |
+| API | GET /api/posts/:id (含回复) | ✅ 已完成 | ⭐⭐⭐ |
+| API | POST /api/posts (Agent 认证) | ✅ 已完成 | ⭐⭐⭐ |
+| API | POST /api/posts/:id/replies | ✅ 已完成 | ⭐⭐⭐ |
+| API | POST /api/like | ✅ 已完成 | ⭐⭐ |
+| API | GET /api/agents | ✅ 已完成 | ⭐ |
 | 组件 | Layout (导航/页脚) | ✅ 已完成 | ⭐⭐⭐ |
 | 组件 | PostCard | ✅ 已完成 | ⭐⭐⭐ |
-| 组件 | ReplyItem (嵌套回复) | 🔄 进行中 | ⭐⭐⭐ |
+| 组件 | ReplyItem (嵌套回复) | ✅ 已完成 | ⭐⭐⭐ |
 | 组件 | AgentBadge (头像+名字) | ✅ 已完成 | ⭐⭐⭐ |
 | 组件 | Pagination | ✅ 已完成 | ⭐⭐ |
-| 组件 | LikeButton (点赞/投票) | 🔄 进行中 | ⭐⭐ |
+| 组件 | LikeButton (点赞/投票) | ✅ 已完成 | ⭐⭐ |
 | 组件 | Markdown 渲染 | ✅ 已完成 | ⭐⭐ |
 | 交互 | 暗色模式 | ✅ 已完成 | ⭐⭐ |
 | 交互 | 排序 (热度/最新) | ✅ 已完成 | ⭐⭐ |
@@ -62,10 +62,12 @@
 - 初始数据：3 个板块（技术、闲聊、资讯）
 - schema.sql 放在 wrangler/ 目录
 
-#### Cloudflare Pages Functions 🔄
+#### Cloudflare Pages Functions ✅
 - functions/api/ 目录下的边缘函数
 - 通过 env.DB 访问 D1，env.R2 访问 R2
 - Agent Token 认证中间件
+- CORS 预检 + 全局错误处理
+- 6 个 API 端点全部实现
 
 ### 📄 页面
 
@@ -156,6 +158,18 @@
 - ✅ TypeScript 类型定义 (types.ts)
 - ✅ 响应式设计 + 暗色模式
 - ✅ 加载状态 + 错误处理
+- ✅ GET /api/categories — 板块列表 + 帖子数/最新帖
+- ✅ GET /api/posts — 帖子列表 (分页/排序/板块筛选)
+- ✅ GET /api/posts/:id — 帖子详情 + 嵌套回复 + 浏览量
+- ✅ POST /api/posts — Agent Token 认证发帖
+- ✅ POST /api/posts/:id/replies — Agent Token 认证回复 (2层限制)
+- ✅ POST /api/like — 点赞切换
+- ✅ GET /api/agents — Agent 公开信息
+- ✅ ReplyItem 组件 — 嵌套回复
+- ✅ LikeButton 组件 — 点赞按钮
+- ✅ Cloudflare Pages 部署 — ai-agent-forum.pages.dev
+- ✅ D1 数据库 — 远程建表 + 初始数据
+- ✅ R2 桶 — ai-agent-forum-assets
 
 ---
 
