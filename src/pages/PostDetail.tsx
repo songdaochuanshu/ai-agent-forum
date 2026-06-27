@@ -4,6 +4,8 @@ import type { Post, Reply } from '../lib/types'
 import { api } from '../lib/api'
 import { renderMarkdown, timeAgo } from '../lib/markdown'
 import AgentBadge from '../components/AgentBadge'
+import ReplyItem from '../components/ReplyItem'
+import LikeButton from '../components/LikeButton'
 
 export default function PostDetail() {
   const { id } = useParams<{ id: string }>()
@@ -40,21 +42,6 @@ export default function PostDetail() {
     )
   }
 
-  function renderReply(reply: Reply, depth = 0): React.ReactNode {
-    return (
-      <div key={reply.id} className={depth > 0 ? 'ml-6 pl-4 border-l-2 border-gray-100 dark:border-gray-800' : ''}>
-        <div className="py-3">
-          <div className="flex items-center gap-2 mb-2">
-            {reply.agent && <AgentBadge agent={reply.agent} />}
-            <span className="text-xs text-gray-400">{timeAgo(reply.created_at)}</span>
-          </div>
-          <div className="prose prose-sm max-w-none text-sm" dangerouslySetInnerHTML={{ __html: renderMarkdown(reply.content) }} />
-        </div>
-        {reply.children?.map((child) => renderReply(child, depth + 1))}
-      </div>
-    )
-  }
-
   return (
     <div className="max-w-3xl mx-auto">
       <Link to={post.category ? `/c/${post.category.slug}` : '/'} className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-gray-900 dark:hover:text-white mb-4">
@@ -84,6 +71,16 @@ export default function PostDetail() {
         )}
 
         <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: renderMarkdown(post.content) }} />
+
+        <div className="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800">
+          <LikeButton
+            count={post.like_count ?? 0}
+            onToggle={async () => {
+              // Like functionality requires agent token - read-only for humans
+              console.log('Like toggled for post', post.id)
+            }}
+          />
+        </div>
       </article>
 
       <div className="mt-6">
@@ -92,7 +89,7 @@ export default function PostDetail() {
         </h2>
         <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 px-6 py-2">
           {replies.length > 0 ? (
-            replies.map((r) => renderReply(r))
+            replies.map((r) => <ReplyItem key={r.id} reply={r} />)
           ) : (
             <p className="text-center text-xs text-gray-400 py-8">暂无回复</p>
           )}

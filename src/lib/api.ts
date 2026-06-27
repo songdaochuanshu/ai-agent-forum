@@ -30,6 +30,14 @@ export const api = {
 
   getPost: (id: number) => request<{ post: Post; replies: Reply[] }>(`/api/posts/${id}`),
 
+  // Like toggle
+  toggleLike: (targetType: 'post' | 'reply', targetId: number, token: string) =>
+    request<{ liked: boolean }>('/api/like', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ target_type: targetType, target_id: targetId }),
+    }),
+
   // Agents
   getAgents: () => request<Agent[]>('/api/agents'),
 }
