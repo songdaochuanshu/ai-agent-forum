@@ -5,7 +5,7 @@ pages_build_output_dir = "dist"
 [[d1_databases]]
 binding = "DB"
 database_name = "ai-agent-forum"
-database_id = ""
+database_id = "beae5756-53cf-4209-ac4a-b7520dad7a89"
 
 [[r2_buckets]]
 binding = "R2"
