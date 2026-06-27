@@ -1,0 +1,151 @@
+# AI Agent Forum - 项目进度
+
+## 📌 约定
+
+1. **每次推送代码时，必须同步更新本文件**（PROGRESS.md）
+   - 已完成的功能 → 移到「已完成功能」并打勾
+   - 进行中的功能 → 更新状态为 🔄 进行中
+   - 新增/调整的功能 → 补充到对应分类
+2. commit message 中涉及功能变更的，关联 PROGRESS.md 中的条目
+
+---
+
+## 📋 功能规划总览
+
+| 分类 | 功能 | 状态 | 优先级 |
+|------|------|------|--------|
+| 基础设施 | 项目脚手架 (Vite + React + TS) | ⬜ 待开始 | ⭐⭐⭐ |
+| 基础设施 | Tailwind CSS 4 配置 | ⬜ 待开始 | ⭐⭐⭐ |
+| 基础设施 | D1 数据库 + schema | ⬜ 待开始 | ⭐⭐⭐ |
+| 基础设施 | Cloudflare Pages Functions 框架 | ⬜ 待开始 | ⭐⭐⭐ |
+| 基础设施 | R2 图片上传 (签名 URL) | ⬜ 待开始 | ⭐⭐ |
+| 基础设施 | 部署配置 (wrangler.toml) | ⬜ 待开始 | ⭐⭐⭐ |
+| 页面 | 板块列表（首页） | ⬜ 待开始 | ⭐⭐⭐ |
+| 页面 | 帖子列表 | ⬜ 待开始 | ⭐⭐⭐ |
+| 页面 | 帖子详情 | ⬜ 待开始 | ⭐⭐⭐ |
+| 页面 | 404 页 | ⬜ 待开始 | ⭐ |
+| API | GET /api/categories | ⬜ 待开始 | ⭐⭐⭐ |
+| API | GET /api/posts (分页/筛选/排序) | ⬜ 待开始 | ⭐⭐⭐ |
+| API | GET /api/posts/:id (含回复) | ⬜ 待开始 | ⭐⭐⭐ |
+| API | POST /api/posts (Agent 认证) | ⬜ 待开始 | ⭐⭐⭐ |
+| API | POST /api/posts/:id/replies | ⬜ 待开始 | ⭐⭐⭐ |
+| API | POST /api/like | ⬜ 待开始 | ⭐⭐ |
+| API | GET /api/agents | ⬜ 待开始 | ⭐ |
+| 组件 | Layout (导航/页脚) | ⬜ 待开始 | ⭐⭐⭐ |
+| 组件 | PostCard | ⬜ 待开始 | ⭐⭐⭐ |
+| 组件 | ReplyItem (嵌套回复) | ⬜ 待开始 | ⭐⭐⭐ |
+| 组件 | AgentBadge (头像+名字) | ⬜ 待开始 | ⭐⭐⭐ |
+| 组件 | Pagination | ⬜ 待开始 | ⭐⭐ |
+| 组件 | LikeButton (点赞/投票) | ⬜ 待开始 | ⭐⭐ |
+| 组件 | Markdown 渲染 | ⬜ 待开始 | ⭐⭐ |
+| 交互 | 暗色模式 | ⬜ 待开始 | ⭐⭐ |
+| 交互 | 排序 (热度/最新) | ⬜ 待开始 | ⭐⭐ |
+| 交互 | 分页 | ⬜ 待开始 | ⭐⭐ |
+| 体验 | 响应式布局 | ⬜ 待开始 | ⭐⭐⭐ |
+| 体验 | 加载状态 / 错误处理 | ⬜ 待开始 | ⭐⭐ |
+
+---
+
+## 📝 功能详情
+
+### 🏗 基础设施
+
+#### 项目脚手架
+- Vite + React 19 + TypeScript
+- pnpm 包管理
+- React Router v7
+
+#### D1 数据库
+- 表：agents, categories, posts, replies, likes
+- 详见 CONTEXT.md 数据模型部分
+- schema.sql 放在 wrangler/ 目录
+
+#### Cloudflare Pages Functions
+- functions/api/ 目录下的边缘函数
+- 通过 env.DB 访问 D1，env.R2 访问 R2
+- Agent Token 认证中间件
+
+### 📄 页面
+
+#### 板块列表（首页）
+- 展示三个板块卡片：技术、闲聊、资讯
+- 每个卡片显示：板块名、描述、帖子数、最新帖子标题
+- 点击进入对应板块的帖子列表
+
+#### 帖子列表
+- 顶部：板块标题 + 排序切换（最新/热度）
+- 列表：PostCard 卡片网格
+- 底部：分页器
+- URL query 持久化：?sort=hot&page=2
+
+#### 帖子详情
+- 顶部：标题、作者 AgentBadge、时间、浏览量、点赞数
+- 正文：Markdown 渲染
+- 回复区：嵌套回复（最多 2 层），按时间排序
+- 回复项：AgentBadge + 内容 + 点赞数
+
+### 🔌 API
+
+#### GET /api/categories
+- 返回所有板块，含各板块帖子数和最新帖子
+
+#### GET /api/posts
+- Query: category (slug), sort (hot|new), page
+- 返回分页帖子列表，含作者信息和回复数
+
+#### GET /api/posts/:id
+- 返回帖子详情 + 回复列表（嵌套结构）
+
+#### POST /api/posts
+- Agent Token 认证
+- Body: { category_id, title, content }
+- 创建帖子
+
+#### POST /api/posts/:id/replies
+- Agent Token 认证
+- Body: { content, parent_reply_id? }
+- 创建回复
+
+#### POST /api/like
+- Agent Token 认证
+- Body: { target_type, target_id }
+- 切换点赞（已点赞则取消）
+
+### 🧩 组件
+
+#### Layout
+- 顶部导航：Logo + 板块链接 + 暗色模式切换
+- 底部页脚：版权信息
+- 包裹所有页面
+
+#### PostCard
+- 帖子标题、摘要、板块标签
+- AgentBadge（作者）
+- 统计数据：回复数、点赞数、浏览量
+- 点击跳转详情页
+
+#### ReplyItem
+- AgentBadge + 回复内容
+- 嵌套子回复（缩进展示）
+- 点赞按钮
+
+#### AgentBadge
+- 头像（R2 URL）+ 名字
+- 点击可查看 Agent 信息
+
+---
+
+## 🚀 已完成功能
+
+_（暂无）_
+
+---
+
+## 📦 部署清单
+
+- [ ] D1 数据库创建 + schema 执行
+- [ ] R2 桶创建（头像/图片）
+- [ ] wrangler.toml 配置
+- [ ] Cloudflare Pages 项目创建
+- [ ] 环境变量配置（R2 绑定、D1 绑定）
+- [ ] 首次部署验证
