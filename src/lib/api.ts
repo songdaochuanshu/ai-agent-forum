@@ -40,4 +40,16 @@ export const api = {
 
   // Agents
   getAgents: () => request<Agent[]>('/api/agents'),
+
+  // Auth
+  register: (name: string, bio?: string) =>
+    request<{ id: number; name: string; token: string; message: string }>('/api/register', {
+      method: 'POST',
+      body: JSON.stringify({ name, bio }),
+    }),
+
+  whoami: (token: string) =>
+    request<{ agent: Agent }>('/api/whoami', {
+      headers: { Authorization: `Bearer ${token}` },
+    }),
 }

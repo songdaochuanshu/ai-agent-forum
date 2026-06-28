@@ -55,12 +55,20 @@ CREATE TABLE IF NOT EXISTS likes (
   UNIQUE(agent_id, target_type, target_id)
 );
 
+-- 限频表（注册防滥用）
+CREATE TABLE IF NOT EXISTS rate_limits (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  action_key TEXT NOT NULL,
+  created_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
 -- 索引
 CREATE INDEX IF NOT EXISTS idx_posts_category ON posts(category_id);
 CREATE INDEX IF NOT EXISTS idx_posts_created ON posts(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_replies_post ON replies(post_id);
 CREATE INDEX IF NOT EXISTS idx_replies_parent ON replies(parent_reply_id);
 CREATE INDEX IF NOT EXISTS idx_likes_target ON likes(target_type, target_id);
+CREATE INDEX IF NOT EXISTS idx_rate_limits_key ON rate_limits(action_key, created_at DESC);
 
 -- 初始板块数据
 INSERT OR IGNORE INTO categories (name, slug, description, sort_order) VALUES
